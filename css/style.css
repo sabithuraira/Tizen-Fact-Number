@@ -22,22 +22,17 @@ header h1 {
     text-align: center;
 }
 
-/* .radio-vertical input {
-    float: left;
-}
-
-.radio-vertical label {
-    float: left;
-}
-
-.radio-vertical label + input {
-    clear: both;
-} */
-
 table {
 	margin-top:10px;
     width: 100%;
     vertical-align: middle;
+}
+
+img{
+	margin-top:10px;
+    vertical-align: middle;
+    width: 35px;
+    height: 35px;
 }
 /* 
 .text-input {
@@ -76,7 +71,7 @@ button {
     box-shadow: 0px 0px 0px 0px #ffffff;
 }
 
-#text-date, #text-month{
+#text-date, #text-month, #img-load, #img-info, #msg-box {
 	display: none;
 }
 
@@ -86,4 +81,61 @@ button {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.message-box-wrapper {
+	margin-top: 20px;
+    position: relative;
+    margin-bottom: 40px;
+    min-height: 99px;
+    width: 90%;
+}
+
+.message-box-wrapper.left {
+    left: 18px;
+}
+
+.message-box-wrapper.right {
+    left: 112px;
+}
+
+.message-box-wrapper:before {
+    position: absolute;
+    width: 18px;
+    height: 36px;
+    top: 44px;
+    content: '';
+    display: block;
+}
+
+.message-box-wrapper.left:before {
+    left: -8px;
+    background-image: url('../image/tooltip_pointer_dark.png');
+}
+
+.message-box-wrapper.right:before {
+    right: -17px;
+    background-image: url('../image/tooltip_pointer_light.png');
+}
+
+.message-box {
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 25px;
+}
+
+.left .message-box {
+    background-color: rgb(35, 35, 35);
+}
+
+.right .message-box {
+    background-color: rgb(45, 45, 45);
+}
+
+.message-header {
+    color: rgb(213, 43, 39);
+}
+
+.message-content {
+    font-weight: lighter;
 }

@@ -1,101 +1,68 @@
-/*
- * Copyright (c) 2015 Samsung Electronics Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 (function() {
-    /**
-     * Changes the image of the icon to be displayed
-     * @private
-     * @param {Number} imgId - the id of the image
-     */
-    function changeImg(imgId) {
-        var imgPath = "./image/" + imgId + ".svg";
-
-        document.querySelector("#img-icon").setAttribute("src", imgPath);
-    }
-
-    /**
-     * Launches the Callee application using the Application Control
-     * @private
-     */
     function launchApp() {
-        var appControl = null,
-            successCallback = null,
-            errorCallback = null,
-            appControlReplyCallback = null;
+    	console.log("masuk");
+    	var radio=$("input[name=jenis]:checked").val();
 
-        // Define the data structure describing application control details
-        appControl = new tizen.ApplicationControl(
-            "http://tizen.org/appcontrol/operation/appcall",
-            null,
-            null,
-            null);
+    	document.getElementById("msg-box").style.display="none";
+		document.getElementById("img-load").style.display="inline";
+		document.getElementById("img-info").style.display="none";
+    	
+    	if(radio=="date"){
+        	console.log("date");
+    		var date=$("#text-date").val();
+    		var month=$("#text-month").val();
+    		
+			$.get("http://numbersapi.com/"+month+"/"+date+"/"+radio, function(result){
+				$("#message-header").html("Month: "+month+" date:"+date);
+				$("#message-content").html(result);
 
-        // Define the method to call when the invocation ends successfully
-        successCallback = function() {
-            console.log("launch application control succeed");
-        };
+				document.getElementById("img-info").style.display="inline";
+				document.getElementById("msg-box").style.display="block";
+		        document.querySelector("#img-load").style.display = "none";
+			});
+    	}
+    	else{
+        	console.log("masuk else");
+    		var number=$("#text-number").val();
+    		console.log("http://numbersapi.com/"+number+"/"+radio);
+    		
+			$.get("http://numbersapi.com/"+number+"/"+radio, function(result){
+				$("#message-header").html(number);
+				$("#message-content").html(result);
 
-        // Define the method to invoke when an error occurs
-        errorCallback = function(e) {
-            alert("App Callee Sample \n must be installed.");
-            console.error("launch application control failed. reason: " + e.message);
-        };
+				document.getElementById("img-info").style.display="inline";
+				document.getElementById("msg-box").style.display="block";
+		        document.querySelector("#img-load").style.display = "none";
+			});
+    	}
+    }
+    
+    function changeRadio(){
+    	var radio=$("input[name=jenis]:checked").val();
+    	
+    	if(radio=="date"){
+    		document.getElementById("text-date").style.display="inline";
+    		document.getElementById("text-month").style.display="inline";
 
-        // Define the method to invoke when the application gets back results from the Callee application
-        appControlReplyCallback = {
-            // When succeeded to get a reply from the Callee application
-            onsuccess: function(data) {
-                var i;
-
-                document.querySelector("#content-reply").style.visibility = "visible";
-
-                // Since the data passed from the Callee application is stored as an Object array , it must loop through the array
-                for (i = 0; i < data.length; i++) {
-                    changeImg(data[i].value[0]);
-                }
-
-            },
-            // When failed to get a reply from the Callee application
-            onfailure: function() {
-                alert("Failed to get a reply \n from the AppCallee");
-                console.error("Failed to get a reply from the AppCallee");
-            }
-        };
-
-        try {
-            // Launch an application with the specified application control
-            tizen.application.launchAppControl(
-                appControl,
-                null,
-                successCallback,
-                errorCallback,
-                appControlReplyCallback
-            );
-        } catch (error) {
-            console.error("launchAppControl(): " + error.message);
-        }
+    		document.getElementById("text-date").value="";
+    		document.getElementById("text-month").value="";
+    		
+    		document.getElementById("text-number").style.display="none";
+    	}
+    	else{
+    		document.getElementById("text-date").style.display="none";
+    		document.getElementById("text-month").style.display="none";
+    		document.getElementById("text-number").style.display="inline";
+    		
+    		document.getElementById("text-number").value="";
+    	}
     }
 
-    /**
-     * Sets default event listeners
-     * @private
-     */
     function setDefaultEvents() {
-        // Launch the Callee application when the Call button is clicked
         document.querySelector("#btn-call").addEventListener("click", launchApp);
+        $("input[type=radio]").on("change", changeRadio);
+//        $("input[type=radio]").on("click", changeRadio);
 
         // Add eventListener for tizenhwkey
         document.addEventListener("tizenhwkey", function(e) {
