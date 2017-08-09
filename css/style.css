@@ -134,8 +134,10 @@ button {
 
 .message-header {
     color: rgb(213, 43, 39);
+    word-wrap:break-word;
 }
 
 .message-content {
     font-weight: lighter;
+    word-wrap:break-word;
 }
